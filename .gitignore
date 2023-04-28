@@ -32,3 +32,7 @@
 *.app
 .ccls-cache
 main
+
+main.html
+main.js
+main.wasm

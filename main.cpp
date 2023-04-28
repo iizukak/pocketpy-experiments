@@ -14,6 +14,6 @@ int main() {
 
   // Eval the sum of the list
   PyObject *result = vm->exec("sum(a)", "<eval>", EVAL_MODE);
-  std::cout << CAST(int, result); // 6
+  std::cout << CAST(int, result) << std::endl; // 6
   return 0;
 }

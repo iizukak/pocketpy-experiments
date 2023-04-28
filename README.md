@@ -18,3 +18,9 @@ $ ./main
 $ em++ main.cpp -s WASM=1 -o main.html
 $ emrun main.html
 ```
+
+## Clean
+
+```
+$ rm -rf main main.js main.html main.js main.wasm
+```

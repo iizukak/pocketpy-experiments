@@ -16,7 +16,7 @@ int main() {
   PyObject *result = vm->exec("sum(a)", "main.py", EVAL_MODE);
   std::cout << CAST(int, result) << std::endl; // 6
 
-  // Create a new Python module
+  // Create a new Python module in C++
   PyObject *mymodule = vm->new_module("mymodule");
   // Add a function to mymodule
   vm->bind_func<2>(mymodule, "add", [](VM *vm, ArgsView args) {
@@ -25,9 +25,26 @@ int main() {
     return VAR(lhs + rhs);
   });
   vm->exec("import mymodule", "main.py", EXEC_MODE);
-  PyObject *obj = vm->exec("mymodule.add(10, 20)", "main.py", EVAL_MODE);
-  int i = CAST(int, obj);
-  std::cout << i << std::endl;
+  PyObject *result_add = vm->exec("mymodule.add(10, 20)", "main.py", EVAL_MODE);
+  int add_result = CAST(int, result_add);
+  std::cout << add_result << std::endl;
+
+  // Create a new Python function in C++
+  vm->bind_builtin_func<2>("sub", [](VM *vm, ArgsView args) {
+    i64 lhs = CAST(i64, args[0]);
+    i64 rhs = CAST(i64, args[1]);
+    return VAR(lhs - rhs);
+  });
+  PyObject *result_sub = vm->exec("sub(10, 20)", "main.py", EVAL_MODE);
+  int sub_result = CAST(int, result_sub);
+  std::cout << sub_result << std::endl;
+
+  // Call Python function from C++
+  std::string hello_function_string = "def hello():"
+                                      "    print('Hello, from Python')";
+  vm->exec(hello_function_string, "main.py", EXEC_MODE);
+  PyObject *hello_function_object = vm->getattr(vm->_main, "hello");
+  vm->call(hello_function_object);
 
   return 0;
 }
